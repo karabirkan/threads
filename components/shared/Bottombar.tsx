@@ -16,7 +16,7 @@ const Bottombar = () => {
             pathname === link.route;
 
           return (
-            <div>
+            <div key={link.label}>
               <Link
                 key={link.label}
                 href={link.route}
