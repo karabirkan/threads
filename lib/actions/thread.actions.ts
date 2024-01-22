@@ -18,18 +18,22 @@ export async function createThread({
   communityId,
   path,
 }: createThreadParams) {
-  connectToDB();
+  try {
+    connectToDB();
 
-  const createdThread = await Thread.create({
-    text,
-    author,
-    community: null,
-  });
+    const createdThread = await Thread.create({
+      text,
+      author,
+      community: null,
+    });
 
-  // update user model
-  await User.findByIdAndUpdate(author, {
-    $push: { threads: createdThread._id },
-  });
+    // update user model
+    await User.findByIdAndUpdate(author, {
+      $push: { threads: createdThread._id },
+    });
 
-  revalidatePath(path);
+    revalidatePath(path);
+  } catch (error) {
+    throw new Error("Error creating thread");
+  }
 }
