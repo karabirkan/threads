@@ -50,10 +50,10 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
   const postsQuery = Thread.find({ parentId: { $in: [null, undefined] } })
     .sort({
       createdAt: "desc",
-    })
-    .skip(skipAmount)
-    .limit(pageSize)
-    .populate({ path: "author", model: User })
+    }) // helps you to sort fetched items by date desc
+    .skip(skipAmount) // skip the amount of query by giving skipAmopunt
+    .limit(pageSize) // this is same these are for paginations
+    .populate({ path: "author", model: User }) // so populate author array and pass User
     .populate({
       path: "children", // Populate the children field
       populate: {
@@ -65,7 +65,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 
   const totalPostsCount = await Thread.countDocuments({
     parentId: { $in: [null, undefined] },
-  });
+  }); //pagination
 
   const posts = await postsQuery.exec();
 
