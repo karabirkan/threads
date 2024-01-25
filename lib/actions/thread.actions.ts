@@ -73,3 +73,15 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 
   return { posts, isNext };
 }
+
+export async function fetchThreadById(id: string) {
+  connectToDB();
+
+  try {
+    const thread = await Thread.findById(id);
+    if (!thread) return null;
+    return thread;
+  } catch (error) {
+    console.log(error);
+  }
+}
