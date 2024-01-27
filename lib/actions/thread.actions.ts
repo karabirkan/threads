@@ -78,7 +78,32 @@ export async function fetchThreadById(id: string) {
   connectToDB();
 
   try {
-    const thread = await Thread.findById(id);
+    const thread = await Thread.findById(id)
+      .populate({
+        path: "author",
+        model: User,
+        select: "_id id name image",
+      })
+      .populate({
+        path: "children",
+        populate: [
+          {
+            path: "author",
+            model: User,
+            select: "_id id name parentId image",
+          },
+          {
+            path: "children",
+            model: Thread,
+            populate: {
+              path: "author",
+              model: User,
+              select: "_id id name parentId image",
+            },
+          },
+        ],
+      });
+
     if (!thread) return null;
     return thread;
   } catch (error) {
