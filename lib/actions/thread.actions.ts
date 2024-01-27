@@ -102,10 +102,40 @@ export async function fetchThreadById(id: string) {
             },
           },
         ],
-      });
+      })
+      .exec();
 
     if (!thread) return null;
     return thread;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function addCommentToThread(
+  threadId: string,
+  commentText: string,
+  userId: string,
+  path: string
+) {
+  connectToDB();
+  try {
+    const originalThread = await Thread.findById(threadId);
+    if (!originalThread) {
+      throw new Error("Thread not found");
+    }
+
+    const commentThread = new Thread({
+      text: commentText,
+      author: userId,
+      parentId: threadId,
+    });
+    const savedCommentThread = await commentThread.save();
+
+    originalThread.children.push(savedCommentThread._id);
+
+    await originalThread.save();
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
   }
