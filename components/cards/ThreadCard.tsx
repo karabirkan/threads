@@ -52,6 +52,7 @@ const ThreadCard = ({
             </Link>
             <div className="thread-card_bar" />
           </div>
+
           <div className="flex w-full flex-col">
             <Link className="w-fit" href={`/profile/${author.id}`}>
               <h4 className="cursor-pointer text-base-semibold text-light-1">
@@ -95,8 +96,8 @@ const ThreadCard = ({
               </div>
               {isComment && comments.length > 0 && (
                 <Link href={`/thread/${id}`}>
-                  <p className="mt-1 text-subtle-medium txet-gray-1">
-                    {comments.length} replies
+                  <p className="mt-1 text-subtle-medium text-gray-1">
+                    {comments.length} repl{comments.length > 1 ? "ies" : "y"}
                   </p>
                 </Link>
               )}
