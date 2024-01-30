@@ -70,7 +70,7 @@ export async function fetchUserPosts(userId: string) {
     });
 
     return threads;
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
   }
 }
