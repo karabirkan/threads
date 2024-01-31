@@ -33,7 +33,10 @@ interface Props {
   };
   btnTitle: string;
 }
-
+type UploadResult = {
+  fileUrl: string;
+  // Other properties if present
+};
 const AccountProfile = ({ user, btnTitle }: Props) => {
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing("media");
@@ -78,7 +81,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
     const hasImageChanged = isBase64Image(blob);
 
     if (hasImageChanged) {
-      const imgRes = await startUpload(files);
+      const imgRes = (await startUpload(files)) as unknown as UploadResult[];
 
       if (imgRes && imgRes[0].fileUrl) {
         values.profile_photo = imgRes[0].fileUrl;
