@@ -1,20 +1,19 @@
-import UserCard from "@/components/cards/UserCard";
-import { fetchUser, getActivity } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import React from "react";
 
-const page = async () => {
+import { fetchUser, getActivity } from "@/lib/actions/user.actions";
+
+async function Page() {
   const user = await currentUser();
-
   if (!user) return null;
 
   const userInfo = await fetchUser(user.id);
-
   if (!userInfo?.onboarded) redirect("/onboarding");
-  const activity = await getActivity(userInfo._id);
+
+  const activity = (await getActivity(userInfo._id)) || [];
+
   return (
     <>
       <h1 className="head-text">Activity</h1>
@@ -35,7 +34,7 @@ const page = async () => {
                   <p className="!text-small-regular text-light-1">
                     <span className="mr-1 text-primary-500">
                       {activity.author.name}
-                    </span>
+                    </span>{" "}
                     replied to your thread
                   </p>
                 </article>
@@ -48,6 +47,6 @@ const page = async () => {
       </section>
     </>
   );
-};
+}
 
-export default page;
+export default Page;
